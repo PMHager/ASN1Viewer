@@ -3,45 +3,62 @@
 Ein selbsterklärender, strukturgenauer Decoder und Viewer für ASN.1-kodierte Sicherheitsstrukturen (X.509-Zertifikate, PKCS#12/PFX, CMS/PKCS#7, Sperrlisten, Zeitstempel, TSE-Exporte usw.).
 
 > **Hinweis zur Bewerbung beim Prototype Fund (Jahrgang 03):**
-> Dieser Prototyp befindet sich derzeit in aktiver Entwicklung. Das vollständige Quellcode-Repository wird daher noch privat gepflegt und im Falle einer Förderzusage unter einer Open-Source-Lizenz (MIT / Apache 2.0) hier veröffentlicht.
+> Dieser Prototyp befindet sich derzeit in aktiver Entwicklung. Das vollständige Quellcode-Repository wird daher noch nicht-öffentlich gepflegt und im Falle einer Förderzusage unter einer Open-Source-Lizenz (MIT / Apache 2.0) hier veröffentlicht.
 
 ---
 
 ## Warum ASN.1 Viewer?
 
-Kryptografische Nachweise – von der digitalen Signatur an einer Telekom-Rechnung über elektronische Steuerbelege (TSE) bis hin zu Code-Signaturen – basieren auf der Notationssprache **ASN.1**. Bestehende Tools zeigen jedoch oft nur unübersichtliche Hex-Werte oder flache technische Tag-Bäume, die tief aufgeklappt werden müssen, um überhaupt zu erkennen, worum es geht.
+Kryptografische Nachweise – von der digitalen Signatur an einer Telekom-Rechnung über elektronische Steuerbelege (TSE) bis hin zu Code-Signaturen – basieren auf der Notationssprache **ASN.1**. Bestehende Tools zeigen jedoch oft nur unübersichtliche Hex-Werte oder flache technische Tag-Bäume, die tief aufgeklappt werden müssen, um überhaupt erkennen zu können, worum es geht.
 
 **Der ASN.1 Viewer macht komplexe PKI-Strukturen direkt lesbar:**
-* **Mehrstufige Darstellung:** Umschaltbar zwischen *Technisch* (rohe TLV-Hex-Daten), *Syntaktisch* (ASN.1-Grundtypen und Werte) und *Semantisch* (konkrete Schema-Namen wie `Certificate`, `Validity`, `Name` kombiniert mit kontextbezogenen Kommentaren wie derzeit schon bei `-- CN=D-TRUST...`).
-* **Kontextbewusste Analyse:** Durch Eltern-Kind-Rückreferenzen im Ansichtsbaum werden auch verschachtelte Unterstrukturen (etwa in `BIT STRING` oder `OCTET STRING`) erkannt und verständlich benannt und kommentiert.
-* **Umfangreiche OID-Datenbank:** Direkte namentliche Auflösung von Object Identifiern mit Beschreibungen, OID-Pfaden, Verweisen und Links auf zugrundeliegende Standards (RFC, ISO, ETSI etc.).
-* **Lokale Sicherheit:** Im Gegensatz zu Online-Tools verlassen sensible Daten, wie kryptografische Schlüssel, zur Einsichtnahme niemals den Rechner.
-* **Nahtlose Windows-Integration:** Über eine Kontextmenü-Erweiterung (`ASN.1 View`) lassen sich Dateien sowie eingebettete Signaturen direkt aus dem Explorer heraus sowie per Drag & Drop auch aus dem Mailprogramm laden und untersuchen.
+* **Mehrstufige Darstellung:** Umschaltbar zwischen *Technisch* (rohe TLV-Hex-Daten), *Syntaktisch* (ASN.1-Basistypen und Werte) und *Semantisch* (notationskonforme Schemata wie `Certificate`, `Validity`, `Name` kombiniert mit kontextbezogenen Kommentaren wie derzeit schon bei `-- CN=D-TRUST,…`).
+* **Kontextbezogene Analyse:** Durch Eltern-Kind-Rückreferenzen im Ansichtsbaum werden auch verschachtelte Unterstrukturen (etwa innerhalb eines `BIT STRING` oder `OCTET STRING`) erkannt und verständlich benannt und kommentiert.
+* **Umfangreiche OID-Datenbank:** Direkte namentliche Auflösung von Object Identifiern mit Beschreibungen, OID-Pfaden, Verweisen und Links auf zugrundeliegende Standards (RFC, ISO, ETSI, BSI etc.).
+* **Lokale Sicherheit:** Im Gegensatz zu Online-Tools verlassen sensible Daten, wie etwa kryptografische Schlüssel, zur Einsichtnahme niemals den Rechner.
+* **Nahtlose Windows-Integration:** Über eine Kontextmenü-Erweiterung (`ASN.1 View`) lassen sich Dateien sowie eingebettete Signaturen direkt aus dem Explorer heraus, sowie per Drag & Drop auch aus dem Mailprogramm laden und untersuchen.
 
 ---
 
 ## Aktueller Entwicklungsstand (Prototyp)
 
 ### 1. Semantische Ansicht – erster Ausbaustand (Hellmodus)
-Erste Strukturerkennungen (u. a. derzeit in Teilen für X.509-Zertifikate und TSE-Transaktionslogs), inline Kommentare (`--`) und ausführliche OID-Metadaten machen den Inhalt ohne mühsames Aufklappen verständlich:
+Erste Strukturerkennungen (u. a. derzeit in Teilen für X.509-Zertifikate und TSE-Transaktionslogs), Zeilenkommentare (`--`) und ausführliche OID-Metadaten machen den Inhalt bereits ohne mühsames Aufklappen verständlich:
 
 ![Semantische Ansicht eines TSE-Exports im ASN.1 Viewer](docs/images/01-semantic-view.png)
 
-### 2. Technische Rohansicht (Dunkelmodus)
-Dieselbe Datei in der technischen TLV-Hex-Ansicht – genau diese rohe Byte-Ebene zeigen herkömmliche Werkzeuge, die für Nicht-Spezialisten kaum lesbar ist:
+### 2. Technische Rohansicht (Hier im Dunkelmodus)
+Dieselbe Datei in der technischen TLV-Hex-Ansicht – genau diese rohe Byte-Ebene zeigen herkömmliche Werkzeuge, die für Nicht-Spezialisten kaum verständlich sind:
 
 ![Technische Hex-Ansicht im Dunkelmodus](docs/images/02-technical-hex-dark.png)
 
 ### 3. Windows-Kontextmenü & PKCS#12/PFX-Entschlüsselung
-Über die Explorer-Integration (im Prototyp derzeit als „ASN.1 Edit“ im Kontextmenü) lassen sich Dateien direkt öffnen, inklusive der Entschlüsselung geschützter Container (nach optionaler Passwort-Abfrage) wie hier `Elster.pfx` bis in die RSA-Schlüsselparameter und Zertifikate hinein:
+Über die Explorer-Integration (im Prototyp derzeit noch als „ASN.1 Edit“ im Kontextmenü) lassen sich Dateien direkt öffnen, inklusive der Entschlüsselung geschützter Container (nach optionaler Passwort-Abfrage), wie hier `Elster.pfx` bis in die RSA-Schlüsselparameter und Zertifikate hinein:
 
 ![Windows-Kontextmenü und entschlüsselte PKCS#12-Struktur](docs/images/03-contextmenu-pfx.png)
 
+### 4. Indefinite Length Encoding & verschachtelte Strukturen
+
+Unterstützung von Konstrukten mit unbestimmter Länge bis zum abschließenden `End Of Contents`-Tag (`EOC`) sowie automatische Erkennung eingebetteter ASN.1-Strukturen innerhalb von `OCTET STRING`- und `BIT STRING`-Elementen:
+
+![Indefinite Length Encoding und verschachtelte Strukturen](docs/images/04-indefinite.png)
+
+---
+
+## Einblick in den Core-Decoder (Code-Auszug)
+
+Um die technische Architektur und Code-Qualität bereits vor der vollständigen Open-Source-Freigabe transparent zu machen, enthält dieses Repository einen Auszug aus dem Kern des ASN.1-Dekoders:
+
+* **[`Asn.cs`](src/Asn.cs):** Rekursiver BER/CER/DER-Decoder (`Decode()`) nach ITU-T X.680/X.690 mit Eltern-Kind-Referenzen, Unterstützung von *Indefinite Length Encoding*, transaktionaler Validierung verschachtelter In-Band-Strukturen sowie fehlertoleranter Wertaufbereitung (`ValueString`).
+* **[`Extensions.cs`](src/Extensions.cs):** Performante Hilfsmethoden für speichereffiziente Byte- und String-Verarbeitung (`ReadOnlySpan<byte>`, `ReadOnlyMemory<byte>`, `string.Create`, `FrozenSet`, `StringBuilder`), stackbasiertes TreeView-Handling und Farbraum-Berechnungen für den Dunkelmodus.
+
+> **Urheberrecht:** Copyright © 2026 Peter-Michael Hager. Alle Rechte vorbehalten. Bereitgestellt zur technischen Begutachtung im Rahmen der Bewerbung beim Prototype Fund.
+
 ### Was bereits läuft:
-- [x] Rekursiver ASN.1-Dekoder (C#) mit Eltern-Kind-Rückreferenzen und Unterstützung von indefiniten Längen sowie sehr großen Dateien
+- [x] Rekursiver ASN.1-Dekoder (C#) mit Eltern-Kind-Referenzen und Unterstützung von indefiniten Längen sowie sehr großen Dateien
 - [x] Technische Rohansicht (`Technical`) sowie erster Ausbaustand der semantischen Ansicht (`Semantic`)
 - [x] Farblich differenzierte Baumansicht mit Hell-, System- und Dunkelmodus
-- [x] Umfangreiche OID-Auflösung über eine erweiterbare JSON-Datenbank mit Anmerkungen und Links zu Normen-Standards im Detail-Panel
+- [x] Umfangreiche OID-Auflösung über eine extern erweiterbare JSON-Datenbank mit Anmerkungen und Links zu Normen-Standards im Detail-Panel
 - [x] Windows-Kontextmenü-DLL (C++) für eigenständige ASN.1-Dateien, Container (PEM, TAR), Binärdateien und (noch experimentell) signierte E-Mails und PDFs
 
 ---
@@ -49,11 +66,11 @@ Dieselbe Datei in der technischen TLV-Hex-Ansicht – genau diese rohe Byte-Eben
 ## Geplante Weiterentwicklung (Förderzeitraum)
 
 Im Rahmen der Prototype-Fund-Förderung soll der Prototyp zu einem vollständigen Werkzeug ausgebaut werden:
-- [ ] **Syntaktischer Modus (`Syntactic`):** Vollständige Formatierung aller 36 ASN.1 Universal Tags inklusive Längen- und Strukturinformationen
-- [ ] **Ausbau des semantischen Modus (`Semantic`):** Umfassende Schema-Datenbank und automatische Inline-Kommentare (`-- ...`) für alle gängigen X.509-, PKCS-, CMS-, eIDAS- und TSE-Standards
-- [ ] **Vertrauensstellung:** Visuelle Kenntlichmachung der Prüfung gefundener Zertifikatsketten
+- [ ] **Vervollständigung des syntaktischen Modus (`Syntactic`):** Vollständige Formatierung aller 36 ASN.1 Universal Tags inklusive Struktur- und erforderlichen Längeninformationen und inplace Moduswechsel
+- [ ] **Ausbau des semantischen Modus (`Semantic`):** Anpassung an Notations-Standard, umfassende Schema-Datenbank und individualisierte Zeilenkommentare (`-- …`) für alle gängigen X.509-, PKCS-, CMS-, eIDAS-, TSE-Standards und ihrer Unterelemente
+- [ ] **Vertrauensstellung:** Visuelle Kenntlichmachung der Prüfung gefundener Zertifikatsketten und ihres Typs (Root/Sub/End)
 - [ ] **Synchronisierte Hex-/Byte-Ansicht:** Direktes Nachvollziehen von Offsets und Längen im Rohdatenstrom
-- [ ] **Erweiterte Dokumenten- & Container-Analyse:** Vertiefte Auswertung komplexer PDF-Signaturen und verschachtelter E-Mail-Anhänge
+- [ ] **Erweiterte Dokumenten- & Container-Analyse:** Vertiefte Auswertung komplexer PDF-Signaturen und verschachtelter E-Mail-Anhänge, sowie Ausbau der Drag & Drop-Funktionalität
 - [ ] **Mehrsprachigkeit & Kontext-Hilfe:** Deutsche und englische Oberfläche sowie direkte Verweise auf Referenz-Standards
 - [ ] **Plattform-Portabilität (Linux):** Nutzung des plattformunabhängigen .NET-Kerns als Basis für eine spätere Linux-Unterstützung
 
