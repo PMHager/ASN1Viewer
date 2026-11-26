@@ -236,10 +236,8 @@ namespace Asn1View
                                 Universal.VisibleString => AsnDecoder.ReadCharacterString(tlv, AsnEncodingRules.BER, UniversalTagNumber.VisibleString, out _).WrapInQuotes(),
                                 Universal.GeneralString => Encoding.Latin1.GetString(value).WrapInQuotes(),
                                 Universal.UniversalString => AsnDecoder.ReadCharacterString(tlv, AsnEncodingRules.BER, UniversalTagNumber.UniversalString, out _).WrapInQuotes(),
-                                // Universal.UniversalString => Encoding.GetEncoding(12001).GetString(span),
                                 Universal.UnrestrictedCharacterString => value.DetectEncoding().GetString(value).WrapInQuotes(),
                                 Universal.BMPString => AsnDecoder.ReadCharacterString(tlv, AsnEncodingRules.BER, UniversalTagNumber.BMPString, out _).WrapInQuotes(),
-                                // Universal.BMPString => Encoding.BigEndianUnicode.GetString(span),
                                 Universal.Date => Encoding.Latin1.GetString(value).WrapInParentheses(),
                                 Universal.TimeOfDay => Encoding.Latin1.GetString(value).WrapInParentheses(),
                                 Universal.DateTime => Encoding.Latin1.GetString(value).WrapInParentheses(),
@@ -276,8 +274,7 @@ namespace Asn1View
                 _valueString = value;
             }
         }
-        // internal int TotalAsnCount => _asns.Count + _asns.Sum(asn => asn.TotalAsnCount); // Annotation: 25% slower
-        internal int AsnsTotalCount
+        internal int AsnsTotalCount // => _asns.Count + _asns.Sum(asn => asn.TotalAsnCount); // Annotation: 25% slower
         {
             get
             {
@@ -307,8 +304,7 @@ namespace Asn1View
         {
             return Class.Universal == _class && Form == _form && Universal == (Universal)_tag;
         }
-        internal bool IsUniversal(Form Form,
-                                IReadOnlySet<Universal> Universal) // HashSet & FrozenSet
+        internal bool IsUniversal(Form Form, IReadOnlySet<Universal> Universal) // HashSet & FrozenSet
         {
             return Class.Universal == _class && Form == _form && Universal.Contains((Universal)_tag);
         }
