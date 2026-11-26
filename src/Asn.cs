@@ -266,7 +266,7 @@ namespace Asn1View
                     }
                     catch (Exception ex) when (ex is AsnContentException or ArgumentException)
                     {
-                        _valueString = $"<INVALID: '{value.ToHex()}'H>";
+                        _valueString = $"INVALID: '{value.ToHex()}'H>";
                     }
                 }
                 return _valueString;
